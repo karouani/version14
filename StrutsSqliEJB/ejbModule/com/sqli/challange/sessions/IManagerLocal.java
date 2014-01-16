@@ -2,9 +2,8 @@ package com.sqli.challange.sessions;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 import com.sqli.challange.entity.BusinessUnite;
 import com.sqli.challange.entity.ColCompTechno;
@@ -19,19 +18,20 @@ import com.sqli.challange.entity.Site;
 import com.sqli.challange.entity.Technologies;
 
 
-@Local
-public interface IManagerLocal {
+@Remote
+public interface IManagerRemote {
 	public boolean checkrhcol(long rh,long col);
 	
+	//Ajouter
 	public List<Site> consulterAllSite();
 	public List<BusinessUnite> consulterAllBu();
-	
+	///////////////
 	public long organiserRitules(long idcol, long idmanagerRh, long idmanager);
 	
 	public int editermonprofil(long id,Collaborateurs mng,List<String> ltechcomp,List<String> dips,String log,String pwd);
 	public int editermyprofile(long idadm, String nom, String prenom,String email, String sexe,String username,String password);
 	public void ajouterManagerRH(Collaborateurs rh,List<String> ltechcomp,List<String> dips,long ibu,long ist,String log,String pwd,String prof);
-	public void ajouterCollaborateur(Collaborateur col,List<String> ltechcomp,List<String> dips,long ibu,long ist,long idrh);
+	public int ajouterCollaborateur(Collaborateur col,List<String> ltechcomp,List<String> dips,long ibu,long ist,long idrh);
 	public void editerCollaborateur(long idcol,String post,double sal,long idmanagerrh,String dt);
 	public void activerMRHCols(long idmrh,List<Long> listcol);
 	public void desactiverMRHCols(long idmrh,List<Long> listcol);
@@ -42,7 +42,7 @@ public interface IManagerLocal {
 	public List<Collaborateur> consulterlistCollabRH(long rh);
 	public List<Collaborateur> consulterlistCollabNRH(long rh);
 	
-	////****
+////****
 	public Rituls consulterRituls(long id);
 	
 	public Competence checkcomp(String comp);
@@ -56,9 +56,9 @@ public interface IManagerLocal {
 	public void addsalhisto(long idcol,double nsal,String dt);
 	public void affecterRhCol(long cl,long rh);
 	public void deaffecterRhCol(long cl,long rh);
-	
 	public String parseDate(Date d);
 	
+	//Deux methodes pour recuperation Lists Diplome et Technologies
 	public List<String> listDiplomes(long id);
 	public List<String> listTechno(long id);
 	
@@ -78,20 +78,21 @@ public interface IManagerLocal {
 	public String crypterMDF5(String pwd);
 	public int generateMax();
 	
-	
-	//modif 16 
+	//update 16
 	public long getIdFMatricule(int mat);
 	
 	//web service
-		public void ajouterManagerRHRS(int mat,String nm,String pr,String em,String abr,String sx,String dtem,String mb,String pd,String dtps,String pt,String sal,String ltechcomp,String dips,long ibu,long ist,String log,String pwd,String prof);
-		public void ajouterCollaborateurRS(int mat,String nm,String pr,String em,String abr,String sx,String dtem,String mb,String pd,String dtps,String pt,String sal,String ltechcomp,String dips,long ibu,long ist,long idrh);
-		public Collaborateur consulterColFromMat(int mat);
-		public void ajouterCollaborateurDips(long col, String dip);
-		public void ajouterCollaborateurTeCmp(long col, String dip);
-		public List<String> consulterTechno();
-		public List<String> consulterComp();
-		public Collaborateurs consulterManagersFromMat(int mat);
-		public List<String> consulterAllTechno();
-		public List<String> consulterAllComp();
-		public List<ManagerRH> consulterlistRhNon(long idcol);
+	public void ajouterManagerRHRS(int mat,String nm,String pr,String em,String abr,String sx,String dtem,String mb,String pd,String dtps,String pt,String sal,String ltechcomp,String dips,long ibu,long ist,String log,String pwd,String prof);
+	public void ajouterCollaborateurRS(int mat,String nm,String pr,String em,String abr,String sx,String dtem,String mb,String pd,String dtps,String pt,String sal,String ltechcomp,String dips,long ibu,long ist,long idrh);
+	public Collaborateur consulterColFromMat(int mat);
+	public void ajouterCollaborateurDips(long col, String dip);
+	public void ajouterCollaborateurTeCmp(long col, String dip);
+	public List<String> consulterTechno();
+	public List<String> consulterComp();
+	public Collaborateurs consulterManagersFromMat(int mat);
+	public List<String> consulterAllTechno();
+	public List<String> consulterAllComp();
+	public List<ManagerRH> consulterlistRhNon(long idcol);
+	
+	public ManagerRH consulterRhFromMat(int mat);
 }
