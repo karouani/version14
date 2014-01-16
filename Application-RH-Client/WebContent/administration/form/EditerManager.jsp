@@ -482,7 +482,6 @@
 							</div>
 						</div>
 
-						</div>
 						<s:if test="%{form != 'collaborateur' }">
 							<div id="step-4">
 								<input type="hidden" id="testeur" value="non">
