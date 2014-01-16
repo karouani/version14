@@ -35,6 +35,7 @@ public class Diplomes implements Serializable{
 	private String typediplome;
 	private String typecole;
 	private String niveau;
+	private int dldip;
 	
 	@ManyToOne
 	@JoinColumn(name="codecol")
@@ -124,5 +125,16 @@ public class Diplomes implements Serializable{
 
 	public void setPromotion(String promotion) {
 		this.promotion = promotion;
+	}
+	
+	
+	public int getDldip() {
+		return dldip;
+	}
+
+
+
+	public void setDldip(int dldip) {
+		this.dldip = dldip;
 	}
 }
