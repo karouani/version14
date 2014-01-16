@@ -1023,4 +1023,153 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		return em.find(Rituls.class, id);
 	}
 
+
+	//pour web service RS
+	@Override
+	public long getIdFMatricule(int mat) {
+		Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x");
+		sql.setParameter("x", mat);
+		long idmgr=0;
+		if(sql.getResultList().size() != 0){
+			Collaborateurs cl=(Collaborateurs) sql.getResultList().get(0);
+			idmgr=cl.getCodecol();
+		}
+		return idmgr;
+	}
+	
+	
+	@Override
+	public Collaborateur consulterColFromMat(int mat) {
+		Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x");
+		sql.setParameter("x", mat);
+		Collaborateur col=null;
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+			col=(Collaborateur) sql.getResultList().get(i);
+		}
+		return col;
+	}
+
+
+	@Override
+	public void ajouterCollaborateurDips(long col, String dip) {
+		// TODO Auto-generated method stub
+		/*Diplomes ldips;
+		Collaborateurs col=em.find(Collaborateurs.class, id);
+		
+		ldips=this.addDiplomat(dp.split(",")[0], dp.split(",")[4],dp.split(",")[0], dp.split(",")[2],dp.split(",")[3], dp.split(",")[1]);
+
+		this.colabDiplomes(col.getCodecol(), ldips.getCodedip());
+		*/
+		
+	}
+	
+	@Override
+	public void ajouterCollaborateurTeCmp(long col, String dip) {
+		// TODO Auto-generated method stub
+		/*Collaborateurs col=em.find(Collaborateurs.class, id);
+		Technologies ltechno;
+		Competence lcomp;
+		String llevls;
+		 
+		
+		ltechno=this.checktechno(tecmp.split(",")[0]);
+		lcomp=this.checkcomp(tecmp.split(",")[1]);
+		llevls=tecmp.split(",")[2];
+		
+		this.addColCompTechno(col.getCodecol(), lcomp.getCodecompt(), ltechno.getCodetechno(), llevls);
+		*/
+	}
+	
+	@Override
+	public List<String> consulterTechno() {
+		// TODO Auto-generated method stub
+		List<String> tecno=new ArrayList<String>();
+		Query sql=em.createQuery("select  tec from Technologies tec");
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+			tecno.add(((Technologies)sql.getResultList().get(i)).getDesctechno());
+		}
+		return tecno;
+		
+	}
+	
+	@Override
+	public List<String> consulterComp() {
+		List<String> tecno=new ArrayList<String>();
+		Query sql=em.createQuery("select  tec from Competence tec");
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+			tecno.add(((Competence)sql.getResultList().get(i)).getdicrpt());
+		}
+		return tecno;
+	}
+	
+	@Override
+	public void ajouterCollaborateurRS(int mat, String nm, String pr,
+			String em, String abr, String sx, String dtem, String mb,
+			String pd, String dtps, String pt, String sal, String ltechcomp,
+			String dips, long ibu, long ist, long idrh) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public Collaborateurs consulterManagersFromMat(int mat) {
+		Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x");
+		sql.setParameter("x", mat);
+		Collaborateurs col=null;
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+			col=(Collaborateurs) sql.getResultList().get(i);
+		}
+		return col;
+	}
+	
+	@Override
+	public List<String> consulterAllTechno() {
+		List<String> tecs=new ArrayList<String>();
+		Query sql=em.createQuery("select tec from Technologies tec");
+		Technologies tec=null;
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+			tec=(Technologies) sql.getResultList().get(i);
+			tecs.add(tec.getDesctechno());
+		}
+		
+		return tecs;
+	}
+	
+	@Override
+	public List<String> consulterAllComp() {
+		List<String> comps=new ArrayList<String>();
+		Query sql=em.createQuery("select cmp from Competence cmp");
+		Competence cmp=null;
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+			cmp=(Competence) sql.getResultList().get(i);
+			comps.add(cmp.getdicrpt());
+		}
+		
+		return comps;
+	}
+	
+	
+	@Override
+	public List<ManagerRH> consulterlistRhNon(long idmg) {
+		System.out.println("voila id rh"+idmg);
+		List<ManagerRH> rh=new ArrayList<ManagerRH>();
+		Query sql=em.createQuery("select mg from Collaborateurs mg where mg.codecol != :x");
+		sql.setParameter("x", idmg);
+		for (int i = 0; i < sql.getResultList().size(); i++) {
+
+			if(sql.getResultList().get(i) instanceof ManagerRH){
+				rh.add((ManagerRH) sql.getResultList().get(i));
+			}
+		}
+		
+		for(ManagerRH mg:rh){
+			System.out.println("liste rh "+mg);
+		}
+		return rh;
+
+	}
+	
+	
+	
+	
 }
