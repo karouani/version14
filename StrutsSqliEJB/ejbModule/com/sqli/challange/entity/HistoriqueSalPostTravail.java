@@ -23,6 +23,9 @@ public class HistoriqueSalPostTravail implements Serializable{
 	private double hsalaire;
 	private String hdasl;
 	private String hdescspt;
+	private String annee;
+	private String mois;
+	
 	@ManyToOne
 	@JoinColumn(name="codecol")
 	private Collaborateurs colab;
@@ -68,6 +71,18 @@ public class HistoriqueSalPostTravail implements Serializable{
 	}
 	public void setColab(Collaborateurs colab) {
 		this.colab = colab;
+	}
+	public String getAnnee() {
+		return annee;
+	}
+	public void setAnnee(String annee) {
+		this.annee = annee;
+	}
+	public String getMois() {
+		return mois;
+	}
+	public void setMois(String mois) {
+		this.mois = mois;
 	}
 
 }
