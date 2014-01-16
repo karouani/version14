@@ -72,7 +72,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 							dp.split(",")[3], dp.split(",")[1]));
 
 				}
-				*/
+				 */
 				colac.setMatricule(mng.getMatricule());
 				colac.setNom(mng.getNom());
 				colac.setPrenom(mng.getPrenom());
@@ -93,7 +93,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 					System.out.println("code dip "+dps.getTitre()+ "code rh "+colac.getCodecol());
 					this.colabDiplomes(colac.getCodecol(), dps.getCodedip());
 				}
-				*/
+				 */
 				for (int i = 0; i < llevls.size(); i++) {
 					System.out.println("code techno comp "+lcomp.get(i).getdicrpt()+ ltechno.get(i).getDesctechno());
 					this.addColCompTechno(colac.getCodecol(), lcomp.get(i).getCodecompt(), ltechno.get(i).getCodetechno(), llevls.get(i));
@@ -156,7 +156,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 	}
 
 	@Override
-	public void ajouterCollaborateur(Collaborateur col,List<String> ltechcomp,List<String> dips,long ibu,long ist,long idrh) {
+	public int ajouterCollaborateur(Collaborateur col,List<String> ltechcomp,List<String> dips,long ibu,long ist,long idrh) {
 		// TODO Auto-generated method stub
 		List<Technologies> ltechno=new ArrayList<Technologies>();
 		List<Competence> lcomp=new ArrayList<Competence>();
@@ -195,7 +195,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		for (int i = 0; i < llevls.size(); i++) {
 			this.addColCompTechno(crh.getCodecol(), lcomp.get(i).getCodecompt(), ltechno.get(i).getCodetechno(), llevls.get(i));
 		}
-
+		return (int) crh.getCodecol();
 	}
 
 
@@ -337,7 +337,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		return cct;
 	}
 
-	
+
 	@Override
 	public Diplomes addDiplomat(String titre, String promotion, String ecole,
 			String typediplome, String typecole, String niveau,long idcol) {
@@ -376,7 +376,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 	public void addsalhisto(long idcol, double nsal ,String dt) {
 		// TODO Auto-generated method stub
 		try {
-			
+
 			Collaborateurs col=em.find(Collaborateurs.class, idcol);
 			System.out.println("voila notre collaborateur "+col.getNom());
 
@@ -385,12 +385,12 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			String sdt=sdf.format(new Date());
 			System.out.println("voila date parser "+sdt);
 			HistoriqueSalPostTravail histo=new HistoriqueSalPostTravail(nsal,sdt, "");
-			
-				String dy=sdt.split("/")[2];
-				String dm=sdt.split("/")[1];
-				histo.setAnnee(dy);
-				histo.setMois(dm);
-			
+
+			String dy=sdt.split("/")[2];
+			String dm=sdt.split("/")[1];
+			histo.setAnnee(dy);
+			histo.setMois(dm);
+
 
 			col.getHistoriquesal().add(histo);
 			histo.setColab(col);
@@ -401,7 +401,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			System.out.println("fin de persistance");
 
 
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -466,9 +466,9 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 
 	@Override
 	public boolean checkMatricuke(int mat) {
-		
+
 		Query sql2=em.createQuery("select col from Collaborateurs col");
-		
+
 		if(sql2.getResultList().size() > 0){
 			Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x");
 			sql.setParameter("x", mat);
@@ -482,8 +482,8 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 				return false;
 			}
 		}
-		
-		
+
+
 
 		return true;
 	}
@@ -620,7 +620,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		for (int i = 0; i < sql.getResultList().size(); i++) {
 			cdp=(Diplomes) sql.getResultList().get(i);
 			diplo.add(cdp.getTitre()+","+cdp.getNiveau()+","+cdp.getTypediplome()+","+cdp.getTypecole()+","+cdp.getPromotion());
-			
+
 		}
 		System.out.println("dkhlne base bahc n3ameroo k = "+k);
 		k++;
@@ -736,25 +736,25 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		if(!"".equals(mg)){
 			String nm=String.valueOf(mg.split(",")[0]);
 			System.out.println("nmmm "+nm);
-			
+
 			String rs="";
 			System.out.println("contains value "+nm.contains("."));
 			if(nm.contains(".")){
-				
+
 				rs=nm.substring(0,nm.indexOf("."));
 				mat=Integer.parseInt(rs);
-			
+
 			}
 			else{
 				mat=Integer.parseInt(nm);
 			}
-			
+
 			//debut $$$$$$$$$$
 
 			profil=mg.split(",")[12];
 
-			
-			
+
+
 			System.out.println("vlue checked res "+this.checkMatricuke(mat));
 
 			if(this.checkMatricuke(mat)){
@@ -879,7 +879,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 	@Override
 	public int CreerCollaborateurFExcel(String mg) {
 		String log;
-		
+
 		int mat=0;
 		String profil;
 		double sal;
@@ -888,14 +888,14 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		if(!"".equals(mg)){
 			String nm=String.valueOf(mg.split(",")[0]);
 			System.out.println("nmmm "+nm);
-			
+
 			String rs="";
 			System.out.println("contains value "+nm.contains("."));
 			if(nm.contains(".")){
-				
+
 				rs=nm.substring(0,nm.indexOf("."));
 				mat=Integer.parseInt(rs);
-			
+
 			}
 			else{
 				mat=Integer.parseInt(nm);
@@ -904,19 +904,19 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			profil=mg.split(",")[12];
 
 			//String mgnm=String.valueOf(mg.split(",")[13]);
-			
-			
+
+
 			int matmngr= 0;
 			/*if(mgnm.contains(".")){
-				
+
 				matmngr=Integer.parseInt(mgnm.substring(0, mgnm.indexOf(".")));
 
 			}
 			else{
 				matmngr=Integer.parseInt(nm);
 			}
-*/
-			
+			 */
+
 			System.out.println("in here");
 			System.out.println("in collab id "+mat+" et RH "+matmngr);
 			if(this.checkMatricuke(mat) && !this.checkMatricuke(matmngr)){
@@ -999,21 +999,21 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 
 	@Override
 	public long organiserRitules(long idcol, long idmanagerRh, long idmanager) {
-	
-				String desc = "designation,notification,bienvenue";
-				String theme = "Designation comme Manager RH,Collaboratuer "+idcol+"success,bienvenue";
-				String risala = "Vous etes choisi comme designateur du Collaborateur "+idcol +
-						"Le collaborateur bien ajouter avec success" +
-						"Bienvenue dans notre Societe";
-				
-				String lu = "non";
-			Rituls rt=new Rituls(idcol, idmanagerRh,  idmanager, theme, desc, lu, risala);
-			rt.setCol(this.consulterColab(idcol));
-			rt.setDescrt(desc);
-			rt.setMessage(risala);
-			rt.setThemert(theme);
-			em.persist(rt);
-		
+
+		String desc = "designation,notification,bienvenue";
+		String theme = "Designation comme Manager RH,Collaboratuer "+idcol+"success,bienvenue";
+		String risala = "Vous etes choisi comme designateur du Collaborateur "+idcol +
+				"Le collaborateur bien ajouter avec success" +
+				"Bienvenue dans notre Societe";
+
+		String lu = "non";
+		Rituls rt=new Rituls(idcol, idmanagerRh,  idmanager, theme, desc, lu, risala);
+		rt.setCol(this.consulterColab(idcol));
+		rt.setDescrt(desc);
+		rt.setMessage(risala);
+		rt.setThemert(theme);
+		em.persist(rt);
+
 		return rt.getIdrt();
 	}
 
@@ -1036,8 +1036,8 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		}
 		return idmgr;
 	}
-	
-	
+
+
 	@Override
 	public Collaborateur consulterColFromMat(int mat) {
 		Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x");
@@ -1055,14 +1055,14 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		// TODO Auto-generated method stub
 		/*Diplomes ldips;
 		Collaborateurs col=em.find(Collaborateurs.class, id);
-		
+
 		ldips=this.addDiplomat(dp.split(",")[0], dp.split(",")[4],dp.split(",")[0], dp.split(",")[2],dp.split(",")[3], dp.split(",")[1]);
 
 		this.colabDiplomes(col.getCodecol(), ldips.getCodedip());
-		*/
-		
+		 */
+
 	}
-	
+
 	@Override
 	public void ajouterCollaborateurTeCmp(long col, String dip) {
 		// TODO Auto-generated method stub
@@ -1070,16 +1070,16 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		Technologies ltechno;
 		Competence lcomp;
 		String llevls;
-		 
-		
+
+
 		ltechno=this.checktechno(tecmp.split(",")[0]);
 		lcomp=this.checkcomp(tecmp.split(",")[1]);
 		llevls=tecmp.split(",")[2];
-		
+
 		this.addColCompTechno(col.getCodecol(), lcomp.getCodecompt(), ltechno.getCodetechno(), llevls);
-		*/
+		 */
 	}
-	
+
 	@Override
 	public List<String> consulterTechno() {
 		// TODO Auto-generated method stub
@@ -1089,9 +1089,9 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			tecno.add(((Technologies)sql.getResultList().get(i)).getDesctechno());
 		}
 		return tecno;
-		
+
 	}
-	
+
 	@Override
 	public List<String> consulterComp() {
 		List<String> tecno=new ArrayList<String>();
@@ -1101,16 +1101,16 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		}
 		return tecno;
 	}
-	
+
 	@Override
 	public void ajouterCollaborateurRS(int mat, String nm, String pr,
 			String em, String abr, String sx, String dtem, String mb,
 			String pd, String dtps, String pt, String sal, String ltechcomp,
 			String dips, long ibu, long ist, long idrh) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public Collaborateurs consulterManagersFromMat(int mat) {
 		Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x");
@@ -1121,7 +1121,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		}
 		return col;
 	}
-	
+
 	@Override
 	public List<String> consulterAllTechno() {
 		List<String> tecs=new ArrayList<String>();
@@ -1131,10 +1131,10 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			tec=(Technologies) sql.getResultList().get(i);
 			tecs.add(tec.getDesctechno());
 		}
-		
+
 		return tecs;
 	}
-	
+
 	@Override
 	public List<String> consulterAllComp() {
 		List<String> comps=new ArrayList<String>();
@@ -1144,11 +1144,11 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			cmp=(Competence) sql.getResultList().get(i);
 			comps.add(cmp.getdicrpt());
 		}
-		
+
 		return comps;
 	}
-	
-	
+
+
 	@Override
 	public List<ManagerRH> consulterlistRhNon(long idmg) {
 		System.out.println("voila id rh"+idmg);
@@ -1161,15 +1161,33 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 				rh.add((ManagerRH) sql.getResultList().get(i));
 			}
 		}
-		
+
 		for(ManagerRH mg:rh){
 			System.out.println("liste rh "+mg);
 		}
 		return rh;
 
 	}
-	
-	
-	
-	
+
+
+	@Override
+	public void ajouterManagerRHRS(int mat, String nm, String pr, String em,
+			String abr, String sx, String dtem, String mb, String pd,
+			String dtps, String pt, String sal, String ltechcomp, String dips,
+			long ibu, long ist, String log, String pwd, String prof) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	@Override public ManagerRH consulterRhFromMat(int mat) { 
+		Query sql=em.createQuery("select col from Collaborateurs col where col.matricule = :x"); 
+		sql.setParameter("x", mat);
+		ManagerRH rh=null; 
+		for (int i = 0; i < sql.getResultList().size(); i++) { 
+			rh=(ManagerRH) sql.getResultList().get(i);
+		} 
+		return rh; 
+	}
+
 }
