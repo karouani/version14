@@ -1,0 +1,39 @@
+ <!-- Le javascript
+    ================================================== -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap/bootstrap.js"></script>  
+    <script type="text/javascript" src="plugins/validate/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="plugins/uniform/jquery.uniform.min.js"></script>
+
+     <script type="text/javascript">
+        // document ready function
+        $(document).ready(function() {
+            $("input, textarea, select").not('.nostyle').uniform();
+            $("#loginForm").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 4
+                    },
+                    password: {
+                        required: true,
+                        minlength: 4
+                    }  
+                },
+                messages: {
+                    username: {
+                        required: "Fill me please",
+                        minlength: "My name is bigger"
+                    },
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "My password is more that 4 chars"
+                    }
+                }   
+            });
+        });
+    </script>
+
+ 
+    </body>
+</html>

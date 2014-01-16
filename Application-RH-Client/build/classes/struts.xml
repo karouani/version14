@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts SYSTEM "dtds/struts-2.1.dtd" >
+
+<struts>
+
+	<constant name="struts.multipart.maxSize" value="1000000" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.devMode" value="true" />
+
+	<include file="config.xml" />
+
+	<package name="admin" extends="sqli-package" namespace="/">
+
+		<!-- ************Configuration Application************** -->
+
+		<default-action-ref name="login" />
+
+
+		<global-results>
+			<result name="Exception">/error/error404.html</result>
+			<result name="login" type="redirect">/index.jsp</result>
+			<result name="unhandledException">/index.jsp</result>
+		</global-results>
+
+
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception"
+				result="Exception" />
+			<exception-mapping exception="java.lang.Throwable"
+				result="Exception" />
+			<exception-mapping
+				exception="org.apache.struts.register.exceptions.SecurityBreachException"
+				result="unhandledException" />
+			<exception-mapping exception="com.company.SecurityException"
+				result="login" />
+
+		</global-exception-mappings>
+
+
+
+		<!-- Pour seulment les test -->
+		<action name="testForm" class="com.mql.strut.web.actions.TestAction">
+			<result name="success"></result>
+		</action>
+
+		<!-- ************Test Action************** -->
+		<action name="index" class="com.mql.strut.web.actions.StatistiqueAction">
+			<result name="success">/statistique.jsp</result>
+		</action>
+
+		<action name="excel" class="com.mql.strut.web.actions.ExcelAction">
+			<result name="success">/administration/admin.jsp</result>
+		</action>
+
+		<!-- ********************** -->
+
+		<!-- ***************** Compte ****************** -->
+		<action name="login" class="com.mql.strut.web.actions.LoginAction">
+			<result name="admin">/administration/admin.jsp</result>
+			<result name="manager">/manager/admin.jsp</result>
+			<result name="managerRh">/managerRh/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+			<result name="input">/index.jsp</result>
+		</action>
+
+		<action name="logout" class="com.mql.strut.web.actions.logoutAction">
+			<result name="success">/index.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="addColaborateur" class="com.mql.strut.web.actions.LoginAction">
+			<result name="admin">/administration/admin.jsp</result>
+			<result name="manager">/manager/admin.jsp</result>
+			<result name="managerRH">/managerRh/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="menu" class="com.mql.strut.web.actions.MenuAction">
+			<result name="success">/administration/admin.jsp</result>
+		</action>
+
+		<action name="menuIndex" class="com.mql.strut.web.actions.MenuIndexAction">
+			<result name="admin">/administration/admin.jsp</result>
+			<result name="manager">/manager/admin.jsp</result>
+			<result name="managerRh">/managerRh/admin.jsp</result>
+		</action>
+
+		<action name="menuManager" class="com.mql.strut.web.actions.MenuManagerAction">
+			<result name="success">/manager/admin.jsp</result>
+		</action>
+	
+		<!-- ***************** End Compte ****************** -->
+
+		<!-- ***************** Profile ****************** -->
+		<action name="profile" class="com.mql.strut.web.actions.ProfileAction">
+			<result name="admin">/administration/admin.jsp</result>
+			<result name="manager">/manager/admin.jsp</result>
+			<result name="managerRH">/managerRh/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+		<!-- ***************** End Profile ****************** -->
+
+		<!-- ***************** Administration ****************** -->
+
+		<action name="updateAdmin" class="com.mql.strut.web.actions.UpdateAdminAction">
+			<result name="admin">/administration/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="nouveauAdmin" class="com.mql.strut.web.actions.NewAdminAction">
+			<result name="success">/administration/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="list" class="com.mql.strut.web.actions.ListAdminAction">
+			<result name="list">/administration/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="listManager" class="com.mql.strut.web.actions.ListManagerAction">
+			<result name="managerAdmin">/administration/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="editer" class="com.mql.strut.web.actions.EditerManagerAction">
+			<result name="editManager">/administration/admin.jsp</result>
+			<result name="editManagerRh">/manager/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="AjouterManager" class="com.mql.strut.web.actions.AjouterManagerAction">
+			<result name="addManager">/administration/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="UpdateManager" class="com.mql.strut.web.actions.UpdateManagerAction">
+			<result name="managerEdit" type="chain">editer</result>
+		</action>
+
+		<action name="uploadexcel" class="com.mql.strut.web.actions.ImporterExcelAction">
+			<result name="success">/administration/admin.jsp</result>
+		</action>
+
+		<action name="ExportExcelAdmin" class="com.mql.strut.web.actions.ExportExcelAdminAction">
+			<!-- <result name="success" type="chain">listManager</result> -->
+			<result name="success" type="stream">
+				<param name="contentType">application/download</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentLength">${fileSize}</param>
+			</result>
+		</action>
+
+		<!-- ***************** End Administration ****************** -->
+
+		<!-- ****************** Super Mnagaer ******************** -->
+		<action name="listManagerRh" class="com.mql.strut.web.actions.ListManagerRhAction">
+			<result name="success">/manager/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="editerStatusManager"
+			class="com.mql.strut.web.actions.EditerStatusManagerAction">
+			<result name="success">/manager/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="AjouterCollaborateur"
+			class="com.mql.strut.web.actions.AjouterCollaborateurAction">
+			<result name="success">/manager/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="ListCollaborateur"
+			class="com.mql.strut.web.actions.ListCollaborateurAction">
+			<result name="success">/manager/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="editerColaborateurManager"
+			class="com.mql.strut.web.actions.EditerColaborateurManagerAction">
+			<result name="success">/manager/admin.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="UpdateColaborateurManager"
+			class="com.mql.strut.web.actions.UpdateColaborateurManagerAction">
+			<result name="success" type="chain">editerColaborateurManager
+			</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="AjouterManagerRH" class="com.mql.strut.web.actions.AjouterManagerRHAction">
+			<result name="success" type="chain">menuManager</result>
+			<result name="error">/index.jsp</result>
+		</action>
+
+		<action name="updateManagerProfile"
+			class="com.mql.strut.web.actions.UpdateManagerProfileAction">
+			<result name="success" type="chain">profile</result>
+		</action>
+
+		<action name="affectationManagerRh"
+			class="com.mql.strut.web.actions.AffectationManagerRhAction">
+			<result name="success" type="chain">editerStatusManager</result>
+		</action>
+
+		<action name="UpdateManagerRh" class="com.mql.strut.web.actions.UpdateManagerRhAction">
+			<result name="managerRhEdit" type="chain">editer</result>
+		</action>
+
+		<action name="ExportExcelManager" class="com.mql.strut.web.actions.ExportExcelManagerAction">
+			<!-- <result name="success" type="chain">listManager</result> -->
+			<result name="success" type="stream">
+				<param name="contentType">application/download</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentLength">${fileSize}</param>
+			</result>
+		</action>
+		
+		<action name="menuManager" class="com.mql.strut.web.actions.MenuManagerAction">
+			<result name="success">/manager/admin.jsp</result>
+		</action>
+		
+		<action name="uploadexcelManager" class="com.mql.strut.web.actions.ImporterExcelManagerAction">
+			<result name="success">/manager/admin.jsp</result>
+		</action> 
+		
+		<action name="ImportExelManager" class="com.mql.strut.web.actions.ImportExelManagerRhAction">
+			<result name="success">/manager/admin.jsp</result>
+		</action>
+		
+		
+		<!-- *****************End Super Manager****************** -->
+
+		<!-- ***************** Manager RH ****************** -->
+
+		<action name="listCollaborateurManagerRh"
+			class="com.mql.strut.web.actions.ListCollaborateurManagerRhAction">
+			<result name="success">/managerRh/admin.jsp</result>
+		</action>
+
+		<action name="editerCollaborateurManagerRh"
+			class="com.mql.strut.web.actions.EditerCollaborateurManagerRhAction">
+			<result name="success">/managerRh/admin.jsp</result>
+		</action>
+
+		<action name="updateCollaborateurManagerRh"
+			class="com.mql.strut.web.actions.UpdateCollaborateurManagerRhAction">
+			<result name="success" type="chain">listCollaborateurManagerRh
+			</result>
+		</action>
+
+		<action name="updateManagerRhProfile"
+			class="com.mql.strut.web.actions.UpdateManagerRhProfileAction">
+			<result name="success" type="chain">profile</result>
+		</action>
+
+		<action name="sendEmail" class="com.mql.strut.web.actions.MailAction">
+			<param name="menu">message</param>
+			<result name="success" type="chain">menu</result>
+			<param name="menu">
+				message
+			</param>
+			<result name="error">/error/error.jsp</result>
+
+		</action>
+
+		<action name="currentEmail" class="com.mql.strut.web.actions.BoiteAction">
+			<result name="success">/administration/admin.jsp</result>
+		</action>
+
+		<action name="ExportExcelManagerRh" class="com.mql.strut.web.actions.ExportExcelManagerRhAction">
+			<!-- <result name="success" type="chain">listManager</result> -->
+			<result name="success" type="stream">
+				<param name="contentType">application/download</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentLength">${fileSize}</param>
+			</result>
+		</action>
+		
+		   
+		<!-- ***************** End Manager RH ****************** -->
+	</package>
+
+</struts>
+
+
+
+ 

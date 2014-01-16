@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts SYSTEM "dtds/struts-2.1.dtd" >
+<struts>
+    
+    <package name="sqli-package" extends="struts-default" abstract="true">
+         <interceptors>
+	        <interceptor 
+	             name="test"
+	             class="com.mql.strut.web.interceptors.AuthentificationInterceptor" 
+	        />
+	        <interceptor-stack name="sqliStack">
+	            <interceptor-ref name="test" />
+	            <interceptor-ref name="defaultStack" />
+	        </interceptor-stack>
+	    </interceptors>
+	    
+         <default-interceptor-ref name="sqliStack" />
+    </package>
+</struts>
