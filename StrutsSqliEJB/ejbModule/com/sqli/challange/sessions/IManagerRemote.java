@@ -77,4 +77,20 @@ public interface IManagerRemote {
 		//new 14-17
 	public String crypterMDF5(String pwd);
 	public int generateMax();
+	
+	//update 16
+	public long getIdFMatricule(int mat);
+	
+	//web service
+	public void ajouterManagerRHRS(int mat,String nm,String pr,String em,String abr,String sx,String dtem,String mb,String pd,String dtps,String pt,String sal,String ltechcomp,String dips,long ibu,long ist,String log,String pwd,String prof);
+	public void ajouterCollaborateurRS(int mat,String nm,String pr,String em,String abr,String sx,String dtem,String mb,String pd,String dtps,String pt,String sal,String ltechcomp,String dips,long ibu,long ist,long idrh);
+	public Collaborateur consulterColFromMat(int mat);
+	public void ajouterCollaborateurDips(long col, String dip);
+	public void ajouterCollaborateurTeCmp(long col, String dip);
+	public List<String> consulterTechno();
+	public List<String> consulterComp();
+	public Collaborateurs consulterManagersFromMat(int mat);
+	public List<String> consulterAllTechno();
+	public List<String> consulterAllComp();
+	public List<ManagerRH> consulterlistRhNon(long idcol);
 }
