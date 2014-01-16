@@ -88,9 +88,9 @@ public class EditerManagerAction{
 		
 		for (int i = 0; i < admin.listTechno(code).size(); i++) {
 			technoModel = new TechnoModel();
-			technoModel.setComp(admin.listTechno(code).get(i).split(",")[1]);
-			technoModel.setLevel(admin.listTechno(code).get(i).split(",")[2]);
-			technoModel.setTechno(admin.listTechno(code).get(i).split(",")[0]);
+			technoModel.setComp(admin.listTechno(code).get(i).split(",")[2]);
+			technoModel.setLevel(admin.listTechno(code).get(i).split(",")[3]);
+			technoModel.setTechno(admin.listTechno(code).get(i).split(",")[1]);
 			
 			techno.add(technoModel);
 		}
@@ -107,7 +107,7 @@ public class EditerManagerAction{
 			return "editManager";
 		}
 	}
-	//RŽcuperation
+	//Rï¿½cuperation
 	public String getType() {
 		return type;
 	}
