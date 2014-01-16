@@ -150,7 +150,6 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 				}
 
 				this.ajouterCompte(rh.getCodecol(), log, pwd, prof);
-				this.addsalhisto(rh.getCodecol(), rh.getSalaireactuel(), "");
 
 			}else{
 				n=2;
@@ -393,7 +392,6 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 		Collaborateurs col=em.find(Collaborateurs.class, idcol);
 		Diplomes dip=new Diplomes(titre, promotion, ecole, typediplome, typecole, niveau);
 
-		dip.setDldip(0);
 		col.getLdips().add(dip);
 		dip.setCols(col);
 
@@ -503,36 +501,20 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 	@Override
 	public void addsalhisto(long idcol, double nsal ,String dt) {
 		// TODO Auto-generated method stub
-		try {
-			
-			Collaborateurs col=em.find(Collaborateurs.class, idcol);
-			System.out.println("voila notre collaborateur "+col.getNom());
+		Collaborateurs col=em.find(Collaborateurs.class, idcol);
+		System.out.println("voila notre collaborateur "+col.getNom());
 
-			System.out.println("bedua bedua");
-			SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
-			String sdt=sdf.format(new Date());
-			System.out.println("voila date parser "+sdt);
-			HistoriqueSalPostTravail histo=new HistoriqueSalPostTravail(nsal,sdt, "");
-			
-				String dy=sdt.split("/")[2];
-				String dm=sdt.split("/")[1];
-				histo.setAnnee(dy);
-				histo.setMois(dm);
-			
+		System.out.println("bedua bedua");
 
-			col.getHistoriquesal().add(histo);
-			histo.setColab(col);
+		HistoriqueSalPostTravail histo=new HistoriqueSalPostTravail(nsal,dt, "");
 
-			System.out.println("voila historique "+histo.getHsalaire());
+		col.getHistoriquesal().add(histo);
+		histo.setColab(col);
 
-			em.persist(histo);
-			System.out.println("fin de persistance");
+		System.out.println("voila historique "+histo.getHsalaire());
 
-
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		em.persist(histo);
+		System.out.println("fin de persistance");
 
 
 	}
@@ -549,20 +531,15 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 	@Override
 	public List<String> listDiplomes(long id) {
 		// TODO Auto-generated method stub
-		int k=0;
-		Query sql=em.createQuery("select dip from Diplomes dip where dip.col.codecol = :x and dip.dldip = :z");
+		Query sql=em.createQuery("select dip from Diplomes dip where dip.col.codecol = :x");
 		sql.setParameter("x", id);
-		sql.setParameter("z", 0);
-		//System.out.println("in remplire dba dt "+new Date());
 		List<String> diplo=new ArrayList<String>();
 		Diplomes cdp=null;
 		for (int i = 0; i < sql.getResultList().size(); i++) {
 			cdp=(Diplomes) sql.getResultList().get(i);
 			diplo.add(cdp.getTitre()+","+cdp.getNiveau()+","+cdp.getTypediplome()+","+cdp.getTypecole()+","+cdp.getPromotion());
-			
 		}
-		System.out.println("dkhlne base bahc n3ameroo k = "+k);
-		k++;
+
 		return diplo;
 	}
 
@@ -856,7 +833,7 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 	@Override
 	public void editerDiplomes(long idcol, List<String> ldips) {
 		// TODO Auto-generated method stub
-			Query sql=em.createQuery("select dip from Diplomes dip where dip.col.codecol = :x and dip.dldip = :z");
+	Query sql=em.createQuery("select dip from Diplomes dip where dip.col.codecol = :x and dip.dldip = :z");
 		sql.setParameter("x", idcol);
 		sql.setParameter("z", 0);
 		List<Diplomes> nldips=new ArrayList<Diplomes>();
@@ -887,22 +864,14 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 	@Override
 	public void supprimerDiplomes(long idcol, long iddip) {
 		// TODO Auto-generated method stub
-		Query sql2=em.createQuery("delete from Diplomes dip where dip.col.codecol = :z");
-		sql2.setParameter("z", idcol);
-	}
-
-
-
-	@Override
-	public void supprimerDiplomes(long idcol, long iddip) {
-		// TODO Auto-generated method stub
 		System.out.println("in deleted");
 		Diplomes dip=em.find(Diplomes.class, iddip);
 		dip.setDldip(1);
 		em.persist(dip);
 	}
-	
-	
+
+
+
 	@Override
 	public String ConsulterTechnCompCol(long idcol, long idtcc) {
 		// TODO Auto-generated method stub
@@ -922,7 +891,7 @@ public class Administrateurvue implements IAdminLocal,IAdminRemote {
 
 	@Override
 	public boolean UpdateTechnCompCol(long idcol, long idtcc, String st) {
-		Query sql = em.createQuery("select tcc from ColCompTechno tcc where tcc.colab.codecol = :x  && tcc.id = :y");
+		Query sql = em.createQuery("select tcc from ColCompTechno tcc where tcc.colab.codecol = :x  and tcc.id = :y");
 		sql.setParameter("x", idcol);
 		sql.setParameter("y", idtcc);
 		String stn="";
