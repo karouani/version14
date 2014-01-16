@@ -151,6 +151,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		}
 
 		this.ajouterCompte(rh.getCodecol(), log, pwd, prof);
+		this.addsalhisto(rh.getCodecol(), rh.getSalaireactuel(), "");
 
 	}
 
@@ -211,8 +212,11 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 			ManagerRH mngac=(ManagerRH)em.find(Collaborateurs.class, idmanagerrh);
 			ManagerRH mnganc=((Collaborateur)col).getManageractuel();
 
-			((Collaborateur)col).setManagerancien(mnganc);
-			((Collaborateur)col).setManageractuel(mngac);
+
+			if(mngac.getCodecol() != mnganc.getCodecol()){
+				((Collaborateur)col).setManagerancien(mnganc);
+				((Collaborateur)col).setManageractuel(mngac);
+			}
 
 
 			SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
@@ -341,6 +345,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 		Collaborateurs col=em.find(Collaborateurs.class, idcol);
 		Diplomes dip=new Diplomes(titre, promotion, ecole, typediplome, typecole, niveau);
 
+		dip.setDldip(0);
 		col.getLdips().add(dip);
 		dip.setCols(col);
 
@@ -370,20 +375,36 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 	@Override
 	public void addsalhisto(long idcol, double nsal ,String dt) {
 		// TODO Auto-generated method stub
-		Collaborateurs col=em.find(Collaborateurs.class, idcol);
-		System.out.println("voila notre collaborateur "+col.getNom());
+		try {
+			
+			Collaborateurs col=em.find(Collaborateurs.class, idcol);
+			System.out.println("voila notre collaborateur "+col.getNom());
 
-		System.out.println("bedua bedua");
+			System.out.println("bedua bedua");
+			SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+			String sdt=sdf.format(new Date());
+			System.out.println("voila date parser "+sdt);
+			HistoriqueSalPostTravail histo=new HistoriqueSalPostTravail(nsal,sdt, "");
+			
+				String dy=sdt.split("/")[2];
+				String dm=sdt.split("/")[1];
+				histo.setAnnee(dy);
+				histo.setMois(dm);
+			
 
-		HistoriqueSalPostTravail histo=new HistoriqueSalPostTravail(nsal,dt, "");
+			col.getHistoriquesal().add(histo);
+			histo.setColab(col);
 
-		col.getHistoriquesal().add(histo);
-		histo.setColab(col);
+			System.out.println("voila historique "+histo.getHsalaire());
 
-		System.out.println("voila historique "+histo.getHsalaire());
+			em.persist(histo);
+			System.out.println("fin de persistance");
 
-		em.persist(histo);
-		System.out.println("fin de persistance");
+
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 
 	}
@@ -589,14 +610,20 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 	@Override
 	public List<String> listDiplomes(long id) {
 		// TODO Auto-generated method stub
-		Query sql=em.createQuery("select cdp from ColabDips cdp where cdp.col.codecol = :x");
+		int k=0;
+		Query sql=em.createQuery("select dip from Diplomes dip where dip.col.codecol = :x and dip.dldip = :z");
 		sql.setParameter("x", id);
-		List<String> diplo=new ArrayList<>();
-		ColabDips cdp=null;
+		sql.setParameter("z", 0);
+		//System.out.println("in remplire dba dt "+new Date());
+		List<String> diplo=new ArrayList<String>();
+		Diplomes cdp=null;
 		for (int i = 0; i < sql.getResultList().size(); i++) {
-			cdp=(ColabDips) sql.getResultList().get(i);
-			diplo.add(cdp.getDip().getTitre()+","+cdp.getDip().getNiveau()+","+cdp.getDip().getTypediplome()+","+cdp.getDip().getTypecole()+","+cdp.getDip().getPromotion());
+			cdp=(Diplomes) sql.getResultList().get(i);
+			diplo.add(cdp.getTitre()+","+cdp.getNiveau()+","+cdp.getTypediplome()+","+cdp.getTypecole()+","+cdp.getPromotion());
+			
 		}
+		System.out.println("dkhlne base bahc n3ameroo k = "+k);
+		k++;
 		return diplo;
 	}
 
@@ -618,7 +645,7 @@ public class Managervue implements IManagerLocal,IManagerRemote {
 	public String MoisBap(String dt) {
 		Map<String, String> months=new HashMap<String, String>();
 		months.put("01", "Janvier");
-		months.put("02", "FŽvrier");
+		months.put("02", "Fï¿½vrier");
 		months.put("03", "Mars");
 		months.put("04", "Avril");
 		months.put("05", "Mai");
